@@ -5,7 +5,8 @@ typedef struct Player
 {
     char* name;
 }Player;
-
+typedef struct Opaque Opaque;
+typedef struct A A;
 extern int32_t double_input(int32_t input);
 extern Player create_player(char* name);
 extern Player* create_player_pointer(char* name);
@@ -14,11 +15,18 @@ extern void free_player(Player p);
 extern char* check_char();
 extern void free_char();
 extern Player default_player();
+// extern Opaque* create_opaque();
+extern A* create_opaque();
+char* opaque_name(A* op);
+extern void free_opaque();
 int main() {
     int input = 4;
     Player p;
     Player* p1;
     Player def;
+    // Opaque* op;
+    A* op;
+    char* op_name;
     int output = double_input(input);
     printf("%d * 2 = %d\n", input, output);
     p = create_player("hello");
@@ -39,5 +47,11 @@ int main() {
     free_char(def.name);
     // or
     // free(def.name);
+
+    op = create_opaque();
+    op_name = opaque_name(op);
+    printf("opaque name = %s\n", op_name);
+    free(op_name);
+    free_opaque(op);
     return 0;
 }

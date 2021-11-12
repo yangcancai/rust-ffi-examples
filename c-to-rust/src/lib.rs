@@ -25,6 +25,22 @@ impl Drop for Player{
     //    println!("drop player...");
     }
 }
+
+pub struct Opaque{
+    name: String,
+    id: i64
+}
+impl Opaque {
+   fn new() -> Self{
+       Opaque{
+           name: "opaque".into(),
+           id: 0
+       }
+   } 
+   fn name(&self) -> &str{
+        self.name.as_str()
+   }
+}
 #[no_mangle]
 pub extern "C" fn double_input(input: i32) -> i32 {
     input * 2
@@ -58,4 +74,17 @@ pub extern "C" fn check_char() -> * const c_char{
 #[no_mangle]
 pub unsafe extern "C" fn free_char(c: *const c_char){
    CString::from_raw(c as *mut c_char);
+}
+#[no_mangle]
+pub unsafe extern "C" fn create_opaque() -> *mut Opaque{
+    Box::into_raw(Box::new(Opaque::new()))
+}
+#[no_mangle]
+pub unsafe extern "C" fn opaque_name(op: *mut Opaque) -> *const c_char{
+    let name = (*op).name();
+    CString::new(name).unwrap().into_raw()
+}
+#[no_mangle]
+pub unsafe extern "C" fn free_opaque(op: *mut Opaque){
+    Box::from_raw(op);
 }
