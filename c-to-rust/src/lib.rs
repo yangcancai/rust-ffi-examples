@@ -21,6 +21,7 @@ impl Player {
 }
 impl Drop for Player{
     fn drop(&mut self) {
+      unsafe {let _= CString::from_raw(self.name as *mut c_char);}
     //   let name =unsafe {CStr::from_ptr(self.name).to_str().unwrap_or_default()};
     //    println!("drop player...");
     }

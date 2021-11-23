@@ -18,7 +18,7 @@ extern Player default_player();
 // extern Opaque* create_opaque();
 extern A* create_opaque();
 char* opaque_name(A* op);
-extern void free_opaque();
+extern void free_opaque(Opaque* op);
 int main() {
     int input = 4;
     Player p;
@@ -33,7 +33,7 @@ int main() {
     printf("player name = %s\n", p.name);
     p1 = create_player_pointer("hello1");
     printf("player name = %s\n", p1->name);
-    free_player(p);
+    // free_player(p);
     // free_player_pointer(p1);
     // or
     free(p1);
@@ -44,7 +44,8 @@ int main() {
     free(c);
     def= default_player();
     printf("player name = %s\n", def.name);
-    free_char(def.name);
+    free_player(def);
+    //free_char(def.name);
     // or
     // free(def.name);
 
