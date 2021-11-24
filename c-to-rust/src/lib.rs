@@ -1,6 +1,6 @@
 #![crate_type = "staticlib"]
-use std::ffi::CString;
-use std::os::raw::c_char;
+use std::ffi::{CString, c_void};
+use std::os::raw::{c_char, c_float, c_int};
 #[repr(C)]
 pub struct Player {
     name: * const c_char,
@@ -88,4 +88,41 @@ pub unsafe extern "C" fn opaque_name(op: *mut Opaque) -> *const c_char{
 #[no_mangle]
 pub unsafe extern "C" fn free_opaque(op: *mut Opaque){
     Box::from_raw(op);
+}
+
+   
+#[derive(Debug)]
+#[repr(C)]
+pub struct Foo{
+      a: c_float,
+      b: c_int 
+}
+    
+impl Foo{
+     pub fn new(a: c_float, b: c_int) -> Self{
+        Self{
+            a,
+            b
+        }
+      }
+    
+#[no_mangle]
+pub unsafe extern "C" fn get_foo_as_ptr() -> *mut c_void {
+    //something
+    let pt = Box::into_raw(Box::new(Foo::new(1.23,100)));
+    pt as *mut c_void
+    // pt.cast()
+    }
+#[no_mangle]
+pub unsafe extern "C" fn from_ptr(ptr: *mut c_void) -> Foo {
+        //   let a: *mut Foo = ptr.cast();
+        let a = ptr as *mut Foo;
+          let r = *Box::from_raw(a);
+          r
+        //some magic here
+      }
+}
+#[no_mangle]
+pub unsafe extern "C" fn free_foo(f: Foo){
+    drop(f)
 }
